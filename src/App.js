@@ -17,7 +17,6 @@ function App() {
         Header: "Column 2",
         accessor: "column2",
       },
-      // Добавьте нужное количество столбцов (от 5 до 15)
     ],
     []
   );

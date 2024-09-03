@@ -4,7 +4,6 @@ const Form = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     column1: "",
     column2: "",
-    // Добавьте нужное количество полей
   });
 
   const handleChange = (e) => {
@@ -22,7 +21,7 @@ const Form = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label>Column 1</label>
+        <label className="text-red-500">Column 1</label>
         <input
           name="column1"
           value={formData.column1}
