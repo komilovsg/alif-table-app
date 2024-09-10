@@ -8,6 +8,8 @@ const Table = ({ columns, data }) => {
       data,
     });
 
+  console.log(rows);
+
   return (
     <div className="container mx-auto text-black">
       <table
@@ -34,14 +36,10 @@ const Table = ({ columns, data }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
+          {rows.map((row, index) => {
             prepareRow(row);
             return (
-              <tr
-                {...row.getRowProps()}
-                key={row.original.id}
-                className="border"
-              >
+              <tr {...row.getRowProps()} key={index} className="border">
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}

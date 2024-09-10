@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import logo from "./favivon.ico";
 
 const Form = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -29,8 +30,15 @@ const Form = ({ onSubmit }) => {
       onSubmit={handleSubmit}
       className="container mx-auto flex flex-col gap-2 mt-20"
     >
-      <div>
+      <div className="flex items-center gap-2">
         <h1 className="font-semibold text-green-500">Тестовое задание</h1>
+        <img
+          className="rounded-full"
+          src="./favicon.ico"
+          alt="logo"
+          width={25}
+          height={25}
+        />
       </div>
       <div className="flex flex-col items-start">
         <label className="font-semibold">Заголовок:</label>
