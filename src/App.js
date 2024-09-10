@@ -2,14 +2,14 @@ import React, { useMemo, useState, useEffect } from "react";
 import axios from "axios";
 import Table from "./components/Table";
 import Form from "./components/Form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1); // Для подгрузки новых данных
-  const [hasMore, setHasMore] = useState(true); // Проверка наличия данных для загрузки
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  // Колонки для таблицы
   const columns = useMemo(
     () => [
       {
@@ -17,22 +17,17 @@ function App() {
         accessor: "id",
       },
       {
-        Header: "Title",
+        Header: " Заголовок",
         accessor: "title",
       },
       {
-        Header: "User ID",
-        accessor: "userId",
-      },
-      {
-        Header: "Body",
+        Header: "Описание",
         accessor: "body",
       },
     ],
     []
   );
 
-  // Загрузка данных с сервера при изменении страницы
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -41,11 +36,13 @@ function App() {
           `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=5`
         );
 
-        const newData = response.data.filter(
-          (newItem) => !data.some((item) => item.id === newItem.id)
-        );
+        setData((prevData) => {
+          const newData = response.data.filter(
+            (newItem) => !prevData.some((item) => item.id === newItem.id)
+          );
+          return [...prevData, ...newData];
+        });
 
-        setData((prevData) => [...prevData, ...newData]);
         setHasMore(response.data.length > 0);
       } catch (error) {
         console.error("Ошибка загрузки данных:", error);
@@ -57,17 +54,26 @@ function App() {
     loadData();
   }, [page]);
 
-  // Функция для подгрузки новых данных при нажатии на кнопку
   const loadMoreData = () => {
-    setPage((prevPage) => prevPage + 1); // Увеличиваем страницу для загрузки новых данных
+    setPage((prevPage) => prevPage + 1);
   };
 
-  // Обработка добавления новых данных через форму
-  const handleSubmit = (newData) => {
-    setData((prevData) => [
-      ...prevData,
-      { id: prevData.length + 1, ...newData },
-    ]);
+  const handleSubmit = async (newData) => {
+    try {
+      const maxId = data.reduce(
+        (max, item) => (item.id > max ? item.id : max),
+        0
+      );
+      const newId = maxId + 1;
+
+      const postData = { id: newId, ...newData };
+
+      await axios.post("https://jsonplaceholder.typicode.com/posts", postData);
+
+      setData((prevData) => [...prevData, postData]);
+    } catch (error) {
+      console.error("Ошибка добавления поста:", error);
+    }
   };
 
   return (
@@ -75,16 +81,16 @@ function App() {
       <Form onSubmit={handleSubmit} />
       <Table columns={columns} data={data} />
       {loading && (
-        <p className="flex justify-center items-center mt-20 font-semibold">
-          Loading...
-        </p>
+        <div className="w-full flex justify-center items-center gap-2 p-2 bg-blue-500 text-white rounded mt-2">
+          <AiOutlineLoading3Quarters className="animate-spin text-white text-center w-6 h-6" />
+        </div>
       )}
       {!loading && hasMore && (
         <button
           onClick={loadMoreData}
-          className="w-full p-2 bg-blue-500 text-white rounded"
+          className="w-full flex justify-center items-center gap-2 p-2 bg-blue-500 text-white rounded mt-2"
         >
-          Загрузить еще
+          <p>Загрузить еще</p>
         </button>
       )}
     </div>

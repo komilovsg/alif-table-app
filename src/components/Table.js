@@ -1,61 +1,30 @@
 import React from "react";
-import { useTable } from "react-table";
 
-const Table = ({ columns, data }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data,
-    });
-
-  console.log(rows);
-
+function Table({ columns, data }) {
   return (
-    <div className="container mx-auto text-black">
-      <table
-        {...getTableProps()}
-        className="min-w-full leading-normal border my-10"
-      >
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr
-              {...headerGroup.getHeaderGroupProps()}
-              className="border "
-              key={headerGroup.id}
-            >
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps()}
-                  className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-700"
-                  key={column.id}
-                >
-                  {column.render("Header")}
-                </th>
-              ))}
-            </tr>
+    <table className="table-auto w-full mt-10">
+      <thead>
+        <tr>
+          {columns.map((column) => (
+            <th key={column.accessor} className="px-4 py-2 bg-gray-100 border">
+              {column.Header}
+            </th>
           ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, index) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()} key={index} className="border">
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className="px-5 py-3 border-b border-gray-200 bg-white text-sm"
-                    key={cell.column.id}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row) => (
+          <tr key={row.id}>
+            {columns.map((column) => (
+              <td key={column.accessor} className="border px-4 py-2 text-start">
+                {row[column.accessor]}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
-};
+}
 
 export default Table;
