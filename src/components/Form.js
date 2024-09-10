@@ -2,8 +2,9 @@ import React, { useState } from "react";
 
 const Form = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    column1: "",
-    column2: "",
+    title: "",
+    body: "",
+    userId: 1,
   });
 
   const handleChange = (e) => {
@@ -16,31 +17,44 @@ const Form = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
+    setFormData({
+      title: "",
+      body: "",
+      userId: 1,
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="container mx-auto flex flex-col gap-2 mt-20"
+    >
       <div>
-        <label className="text-red-500">Column 1</label>
+        <h1 className="font-semibold text-green-500">Тестовое задание</h1>
+      </div>
+      <div className="flex flex-col items-start">
+        <label className="font-semibold">Заголовок:</label>
         <input
-          name="column1"
-          value={formData.column1}
+          name="title"
+          value={formData.title}
           onChange={handleChange}
-          className="input-field"
+          className="border-2 rounded-sm w-full"
         />
       </div>
-      <div>
-        <label>Column 2</label>
+      <div className="flex flex-col items-start">
+        <label className="font-semibold">Описание:</label>
         <input
-          name="column2"
-          value={formData.column2}
+          name="body"
+          value={formData.body}
           onChange={handleChange}
-          className="input-field"
+          className="border-2 rounded-sm w-full"
         />
       </div>
-      {/* Добавьте другие поля */}
-      <button type="submit" className="submit-button">
-        Submit
+      <button
+        type="submit"
+        className="border-2 rounded-sm shadow-md bg-blue-500 text-white"
+      >
+        Добавить пост
       </button>
     </form>
   );
